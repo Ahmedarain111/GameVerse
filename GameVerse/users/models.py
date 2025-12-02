@@ -12,9 +12,7 @@ class User(AbstractUser):
     wishlist = models.ManyToManyField('games.Game',     related_name='wishlisted_by', blank=True)
     played_games = models.ManyToManyField('games.Game', related_name='played_by', blank=True)
     
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["username"]
-    
+
     def __str__(self):
         return self.email
     
