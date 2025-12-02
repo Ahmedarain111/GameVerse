@@ -1,20 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
-
+from .forms import SignupForm
 
 User = get_user_model()
 
 
 def signup_view(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("pasword")
-        user = User.objects.create_user(email=email, password=password)
+        form = SignupForm(request.POST)
+        
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("dashboard")
+    else:
+        form = SignupForm()
 
-        login(request, user)
-        return redirect("dashboard")
-
-    return render(request, "users/signup.html")
+    return render(request, "users/signup.html", {"form": form})
 
 
 def login_view(request):
