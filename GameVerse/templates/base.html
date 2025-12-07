@@ -20,15 +20,28 @@
     main {
         padding-top: 80px;
     }
+
+    .btn-custom {
+        background-color: white;
+    }
+
+    @media (max-width: 575px) {
+        .form-custom {
+            display: none !important;
+        }
+        .nav-right {
+            justify-content: center !important;
+        }
+    }
 </style>
 
 <body>
 
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg px-3 fixed-top">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex justify-content-between">
 
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard' %}">
-            <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="40" class="me-2">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'main:home' %}">
+            <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="50" class="me-1">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -36,25 +49,27 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="d-flex justify-content-between align-items-center w-100 nav-right">
 
-            <form class="d-flex mx-auto" method="GET">
-                <input type="text" name="search" class="form-control search-input" placeholder="Search games..." required>
-                <button class="btn btn-custom ms-2" type="submit">Search</button>
-            </form>
+                <form class="d-flex mx-auto w-50 form-custom" method="GET">
+                    <input type="text" name="search" class="form-control search-input" placeholder="Search games..." required>
+                    <button class="btn btn-custom ms-2" type="submit">Search</button>
+                </form>
 
-            <ul class="navbar-nav ms-auto">
-                {% if not user.is_authenticated %}
+                <ul class="navbar-nav ms-3">
+                    {% if not user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                        <a class="nav-link" href="">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Signup</a>
+                        <a class="nav-link" href="{% url 'users:signup' %}">Signup</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'users:login' %}">Login</a>
                     </li>
-                {% endif %}
-            </ul>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
@@ -62,10 +77,10 @@
 {% if user.is_authenticated %}
 <aside class="sidebar bg-dark text-white p-3 position-fixed vh-100">
     <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'dashboard' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'main:home' %}">Home</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#">Categories</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#">My Games</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout' %}">Logout</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'users:logout' %}">Logout</a></li>
     </ul>
 </aside>
 {% endif %}
