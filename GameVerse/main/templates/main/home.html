@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="filter bg-dark p-3 rounded mb-4">
+    <form method="get" class="row g-2 align-items-end">
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <label for="sort" class="form-label text-light">Sort by</label>
+            <select name="sort" id="sort" class="form-select">
+                <option value="-added" {% if request.GET.sort == "-added" %}selected{% endif %}>Popularity</option>
+                <option value="-rating" {% if request.GET.sort == "-rating" %}selected{% endif %}>Rating</option>
+                <option value="-released" {% if request.GET.sort == "-released" %}selected{% endif %}>New</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <label for="platform" class="form-label text-light">Platform</label>
+            <select name="platform" id="platform" class="form-select">
+                <option value="">All</option>
+                <option value="pc" {% if request.GET.platform == "pc" %}selected{% endif %}>PC</option>
+                <option value="ps" {% if request.GET.platform == "ps" %}selected{% endif %}>PlayStation</option>
+                <option value="xbox" {% if request.GET.platform == "xbox" %}selected{% endif %}>Xbox</option>
+                <option value="switch" {% if request.GET.platform == "switch" %}selected{% endif %}>Nintendo Switch</option>
+                <option value="mobile" {% if request.GET.platform == "mobile" %}selected{% endif %}>Mobile</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <label for="genre" class="form-label text-light">Genre</label>
+            <select name="genre" id="genre" class="form-select">
+                <option value="">All</option>
+                <option value="action" {% if request.GET.genre == "action" %}selected{% endif %}>Action</option>
+                <option value="rpg" {% if request.GET.genre == "rpg" %}selected{% endif %}>RPG</option>
+                <option value="adventure" {% if request.GET.genre == "adventure" %}selected{% endif %}>Adventure</option>
+                <option value="shooter" {% if request.GET.genre == "shooter" %}selected{% endif %}>Shooter</option>
+                <option value="strategy" {% if request.GET.genre == "strategy" %}selected{% endif %}>Strategy</option>
+                <option value="simulation" {% if request.GET.genre == "simulation" %}selected{% endif %}>Simulation</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-2">
+            <label for="release_date" class="form-label text-light">Released after</label>
+            <input type="date" name="release_date" id="release_date" class="form-control" value="{{ request.GET.release_date }}">
+        </div>
+
+        <div class="col-12 col-md-1 d-grid gap-2">
+            <button type="submit" class="btn btn-light">Apply</button>
+            <a href="{% url 'main:home' %}" class="btn btn-outline-light">Reset</a>
+        </div>
+
+    </form>
+</div>
+
+<div class="games">
+</div>
+
+{% endblock %}
