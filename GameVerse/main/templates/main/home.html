@@ -1,11 +1,159 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 
+
+{% block styles%}
+<style>
+.filter {
+    background: linear-gradient(135deg, #0b0b0b, #1a1a1a);
+    border: 1px solid #0d2b49;
+}
+.filter label {
+    font-weight: 500;
+}
+.filter .btn {
+    transition: all 0.2s ease-in-out;
+}
+.filter .btn:hover {
+    transform: translateY(-2px);
+}
+
+.filter .form-select,
+.filter .form-control {
+    background-color: #12161C;
+    color: #E6E8EC;
+    border: 1px solid #1A3B6C;
+}
+
+.filter .form-select option {
+    background-color: #12161C;
+    color: #E6E8EC;
+}
+
+.filter .form-control::placeholder {
+    color: #8A8F99;
+}
+
+.filter .form-select:focus,
+.filter .form-control:focus {
+    background-color: #12161C;
+    color: #E6E8EC;
+    border-color: #7A3DAF;
+    box-shadow: 0 0 0 2px rgba(122, 61, 175, 0.25);
+}
+
+.filter .form-select:focus-visible,
+.filter .form-control:focus-visible {
+    outline: none;
+}
+
+
+.reset {
+    background: transparent;
+    border: 1px solid #7A3DAF;
+    color: #E6E8EC
+}
+
+.reset:hover {
+    background-color: #7A3DAF;
+    color: #E6E8EC
+}
+
+.games .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #1a3b6c;
+    border-radius: 10px;
+}
+.games .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+.games .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    object-fit: cover;
+    height: 180px;
+}
+.games .card-title {
+    font-weight: 600;
+}
+.games .badge {
+    font-size: 0.75rem;
+    margin-right: 3px;
+}
+.games .platforms i {
+    font-size: 1rem;
+    color: #DFE7E1;
+}
+.games .card-footer .btn {
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+{% comment %} .games .card-footer .btn:hover {
+    background-color: #1a3b6c;
+} {% endcomment %}
+
+.card button:hover {
+    transform: translateY(-1px);
+    transition: 0.2s ease;
+}
+
+.card-footer {
+    background-color: #12161C;
+    border-top: 1px solid #1a3b6c;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+.add-played {
+    background-color: #E12B8A; 
+    color: #DFE7E1;
+    padding: 0.6rem 0;
+    font-weight: 600;
+}
+
+.add-played:hover {
+    background-color: #FF4FA3;
+    color: #E6E8EC
+}
+
+.wishlist {
+    background: transparent;
+    border: 1px solid #7A3DAF;
+    color: #E6E8EC
+}
+
+.wishlist:hover {
+    background-color: #7A3DAF;
+    color: #E6E8EC
+}
+
+.more-info {
+    background-color: #123458;
+    color: #E6E8EC
+}
+
+.more-info:hover {
+    background-color: #1B4F8A;
+    color: #E6E8EC
+}
+
+@media (max-width: 768px) {
+    .games .card-img-top {
+        height: 150px;
+    }
+}
+</style>
+{% endblock styles%}
+
 {% block content %}
 
-<div class="filter bg-dark p-3 rounded mb-4">
+<div class="filter p-3 rounded mb-4">
     <form method="get" class="row g-2 align-items-end">
 
+        <!-- Sort -->
         <div class="col-12 col-sm-6 col-md-3">
             <label for="sort" class="form-label text-light">Sort by</label>
             <select name="sort" id="sort" class="form-select">
@@ -15,6 +163,7 @@
             </select>
         </div>
 
+        <!-- Platform -->
         <div class="col-12 col-sm-6 col-md-3">
             <label for="platform" class="form-label text-light">Platform</label>
             <select name="platform" id="platform" class="form-select">
@@ -27,6 +176,7 @@
             </select>
         </div>
 
+        <!-- Genre -->
         <div class="col-12 col-sm-6 col-md-3">
             <label for="genre" class="form-label text-light">Genre</label>
             <select name="genre" id="genre" class="form-select">
@@ -40,20 +190,71 @@
             </select>
         </div>
 
+        <!-- Release Date -->
         <div class="col-12 col-sm-6 col-md-2">
             <label for="release_date" class="form-label text-light">Released after</label>
             <input type="date" name="release_date" id="release_date" class="form-control" value="{{ request.GET.release_date }}">
         </div>
 
+        <!-- Buttons -->
         <div class="col-12 col-md-1 d-grid gap-2">
-            <button type="submit" class="btn btn-light">Apply</button>
-            <a href="{% url 'main:home' %}" class="btn btn-outline-light">Reset</a>
+            <button type="submit" class="btn" style="color: #DFE7E1; background-color: #0D2B49">Apply</button>
+            <a href="{% url 'main:home' %}" class="btn reset">Reset</a>
         </div>
 
     </form>
 </div>
 
-<div class="games">
+{% comment %} Cards {% endcomment %}
+<div class="games row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for game in games %}
+        <div class="col">
+            <div class="card h-100" style="background-color: #161A20;">
+                {% if game.background_image %}
+                    <img src="{{ game.background_image }}" class="card-img-top" alt="{{ game.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #E6E8EC">{{ game.name }}</h5>
+                    {% if game.rating %}
+                        <p class="card-text text-warning mb-2" style="color: #A1A6B0 !important;">{{ game.rating }} / 5</p>
+                    {% endif %}
+                    {% if game.genres %}
+                        <div class="mb-2">
+                            {% for genre in game.genres %}
+                                <span class="badge rounded-pill" style="background: transparent; border: 1px solid #7A3DAF; color: #E6E8EC;">
+                                    {{ genre.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="platforms mb-2" style="color: #A1A6B0">
+                        {% for platform in game.platforms %}
+                            {% if platform.platform.name == "PC" %}
+                                <i class="fas fa-desktop me-1" title="PC"></i>
+                            {% elif platform.platform.name == "PlayStation" %}
+                                <i class="fab fa-playstation me-1" title="PlayStation"></i>
+                            {% elif platform.platform.name == "Xbox" %}
+                                <i class="fab fa-xbox me-1" title="Xbox"></i>
+                            {% elif platform.platform.name == "Nintendo Switch" %}
+                                <i class="fas fa-gamepad me-1" title="Switch"></i>
+                            {% elif platform.platform.name == "iOS" or platform.platform.name == "Android" %}
+                                <i class="fas fa-mobile-alt me-1" title="{{ platform.platform.name }}"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="" class="btn btn-sm w-100 mb-2 add-played">Add to Played</a>
+                    <a href="" class="btn btn-sm w-100 mb-2 wishlist">Wishlist</a>
+                    <a href="{{ game.website|default:'#' }}" target="_blank" class="btn btn-sm w-100 mb-2 more-info">More Info</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center text-muted py-5">
+            No games match your filters.
+        </div>
+    {% endfor %}
 </div>
 
 {% endblock %}
