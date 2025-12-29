@@ -22,8 +22,35 @@
         padding-top: 80px;
     }
 
-    .btn-custom {
-        background-color: white;
+    .search-input {
+    background-color: #12161C;
+    color: #E6E8EC;
+    border: 1px solid #1A3B6C;
+    }
+
+    .search-input::placeholder {
+        color: #8A8F99;
+    }
+
+    .search-input:focus {
+    background-color: #12161C;
+    color: #E6E8EC;
+    border-color: #7A3DAF;
+    box-shadow: 0 0 0 2px rgba(122, 61, 175, 0.25);
+    }
+
+    .search-input:focus-visible {
+        outline: none;
+    }
+
+    .search {
+    background-color: #123458;
+    color: #E6E8EC
+}
+
+    .search:hover {
+        background-color: #1B4F8A;
+        color: #E6E8EC
     }
 
     @media (max-width: 575px) {
@@ -36,13 +63,16 @@
     }
 </style>
 
+{% block styles %}
+{% endblock styles%}
+
 <body>
 
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg px-3 fixed-top">
+<nav class="navbar navbar-dark navbar-expand-lg px-3 py-1 fixed-top" style="background-color: #0F1115;">
     <div class="container-fluid d-flex justify-content-between">
 
         <a class="navbar-brand d-flex align-items-center" href="{% url 'main:home' %}">
-            <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="50" class="me-1">
+            <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="60" class="me-1">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -54,7 +84,7 @@
 
                 <form class="d-flex mx-auto w-50 form-custom" method="GET">
                     <input type="text" name="search" class="form-control search-input" placeholder="Search games..." required>
-                    <button class="btn btn-custom ms-2" type="submit">Search</button>
+                    <button class="btn search ms-2" type="submit">Search</button>
                 </form>
 
                 <ul class="navbar-nav ms-3">
@@ -93,3 +123,4 @@
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
+
