@@ -91,6 +91,12 @@
             <img src="{% static 'images/logo.png' %}" alt="Gameverse" class="w-25">
             <h5 class="mt-3 mb-4 text-center" style="color: #DCDCDC">Welcome to GameVerse!</h5>
             {% block content %}{% endblock content %} 
+            
+            {% if request.resolver_match.url_name == 'signup' %}
+                <p class="text-light m-4">Already have an account? <a href="{% url "users:login" %}">Log in</a></p>
+            {% else %}
+                <p class="text-light m-4">Don't have an account? <a href="{% url "users:signup" %}">Signup</a></p>
+            {% endif %}
         </div>
     </main>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
