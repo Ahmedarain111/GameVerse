@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,14 +19,28 @@
         min-height: 100vh;
     }
 
+    .navbar {
+        border-bottom: 2px solid #1A3B6C;
+    }
+
     main {
         padding-top: 80px;
+        transition: margin-left 0.5s ease;
+    }
+
+    main.container-fluid {
+        {% if user.is_authenticated %} margin-left: 64px; {% endif %}
+        padding-left: 8px;
+    }
+
+    .sidebar:hover~main {
+        margin-left: 240px;
     }
 
     .search-input {
-    background-color: #12161C;
-    color: #E6E8EC;
-    border: 1px solid #1A3B6C;
+        background-color: #12161C;
+        color: #E6E8EC;
+        border: 1px solid #1A3B6C;
     }
 
     .search-input::placeholder {
@@ -33,10 +48,10 @@
     }
 
     .search-input:focus {
-    background-color: #12161C;
-    color: #E6E8EC;
-    border-color: #7A3DAF;
-    box-shadow: 0 0 0 2px rgba(122, 61, 175, 0.25);
+        background-color: #12161C;
+        color: #E6E8EC;
+        border-color: #7A3DAF;
+        box-shadow: 0 0 0 2px rgba(122, 61, 175, 0.25);
     }
 
     .search-input:focus-visible {
@@ -44,83 +59,168 @@
     }
 
     .search {
-    background-color: #123458;
-    color: #E6E8EC
-}
+        background-color: #123458;
+        color: #E6E8EC;
+    }
 
     .search:hover {
         background-color: #1B4F8A;
-        color: #E6E8EC
+        color: #E6E8EC;
+    }
+
+    .sidebar {
+        width: 64px;
+        top: 70px;
+        left: 0;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1020;
+        background-color: #0F1115;
+        border-right: 2px solid #0D2B49;
+        transition: width 0.25s ease;
+    }
+
+    .sidebar:hover {
+        width: 240px;
+    }
+
+    .sidebar span {
+        opacity: 0;
+        visibility: hidden;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+    }
+
+    .sidebar:hover span {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px 5px 2px;
+        margin-bottom: 4px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #1A3B6C;
+    }
+
+    .sidebar:not(:hover) .nav-link {    
+        padding-left: 5px;
+    }
+
+    .sidebar .nav-link.active {
+        background-color: #1A3B6C;
+        color: #fff;
+    }
+
+    .sidebar .nav-link.active i {
+        color: #fff;
+    }
+
+    .sidebar i {
+        width: 24px;
+        min-width: 24px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .sidebar i.me-1 {
+        margin-right: 0 !important;
+    }
+
+    @media (max-width: 991px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        main {
+            margin-left: 0;
+        }
     }
 
     @media (max-width: 575px) {
         .form-custom {
             display: none !important;
         }
+
         .nav-right {
             justify-content: center !important;
         }
     }
 </style>
 
+
 {% block styles %}
 {% endblock styles%}
 
 <body>
 
-<nav class="navbar navbar-dark navbar-expand-lg px-3 py-1 fixed-top" style="background-color: #0F1115;">
-    <div class="container-fluid d-flex justify-content-between">
+    <nav class="navbar navbar-dark navbar-expand-lg px-3 py-1 fixed-top" style="background-color: #0F1115;">
+        <div class="container-fluid d-flex justify-content-between">
 
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'main:home' %}">
-            <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="60" class="me-1">
-        </a>
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'main:home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="GameVerse" width="60" class="me-1">
+            </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="d-flex justify-content-between align-items-center w-100 nav-right">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="d-flex justify-content-between align-items-center w-100 nav-right">
 
-                <form class="d-flex mx-auto w-50 form-custom" method="GET">
-                    <input type="text" name="search" class="form-control search-input" placeholder="Search games..." required>
-                    <button class="btn search ms-2" type="submit">Search</button>
-                </form>
+                    <form class="d-flex mx-auto w-50 form-custom" method="GET">
+                        <input type="text" name="search" class="form-control search-input" placeholder="Search games..."
+                            required>
+                        <button class="btn search ms-2" type="submit">Search</button>
+                    </form>
 
-                <ul class="navbar-nav ms-3">
-                    {% if not user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:signup' %}">Signup</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:login' %}">Login</a>
-                    </li>
-                    {% endif %}
-                </ul>
+                    <ul class="navbar-nav ms-3">
+                        {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:signup' %}">Signup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-{% if user.is_authenticated %}
-<aside class="sidebar bg-dark text-white p-3 position-fixed vh-100">
-    <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'main:home' %}">Home</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#">Categories</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#">My Games</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'users:logout' %}">Logout</a></li>
-    </ul>
-</aside>
-{% endif %}
+    {% if user.is_authenticated %}
+    <aside class="sidebar text-white p-3 position-fixed vh-100">
+        <ul class="nav d-flex flex-column">
+            <li class="nav-item"><a class="nav-link text-white {% if request.path == '/' %}active{% endif %}" href="{% url 'main:home' %}"> <i
+                        class="fa-solid fa-house me-1"></i><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link text-white {% if request.path == '/categories/' %}active{% endif %}" href="#"><i
+                        class="fa-solid fa-layer-group me-1"></i><span>Categories</span></a></li>
+            <li class="nav-item"><a class="nav-link text-white {% if request.path == '/my_games/' %}active{% endif %}" href="#"><i
+                        class="fa-solid fa-gamepad me-1"></i><span>My Games</span></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="{% url 'users:logout' %}"><i
+                        class="fa-solid fa-right-from-bracket me-1"></i><span>Logout</span></a></li>
+        </ul>
+    </aside>
+    {% endif %}
 
-<main class="container-fluid">
-    {% block content %}{% endblock %}
-</main>
+    <main class="container-fluid">
+        {% block content %}{% endblock %}
+    </main>
 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
-</html>
 
+</html>
