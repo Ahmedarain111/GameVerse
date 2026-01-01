@@ -25,10 +25,11 @@ It fetches real-time data from the [RAWG Video Games Database API](https://rawg.
 
 ---
 
-## How It Works
+## Screenshots
 
-1. **User enters a game name** in the search bar.
-2. The **frontend** sends the query to the **Django backend** (`/search_games` endpoint).
-3. Django **fetches data** from the RAWG API using Python’s `requests` module.
-4. The backend **filters and sends JSON** results to the frontend.
-5. **JavaScript** dynamically updates the page with game cards and info.
+Login Page:
+<img width="959" height="425" alt="image" src="https://github.com/user-attachments/assets/e2356f22-0298-4556-bbf8-180164ed9788" />
+
+
+Main Page:
+<img width="959" height="421" alt="image" src="https://github.com/user-attachments/assets/783971e1-93c4-4692-a52c-82b28a36ac43" />
